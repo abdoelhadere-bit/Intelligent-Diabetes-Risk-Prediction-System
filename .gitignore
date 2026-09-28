@@ -18,11 +18,9 @@ mlruns/
 mlartifacts/
 
 # Modèles et Artefacts lourds (conserver le dossier mais ignorer les poids)
-models/*
 !models/.gitkeep
 
 # Données (ne pas versionner les datasets volumineux)
-data/raw/*
 !data/raw/.gitkeep
 data/processed/*
 !data/processed/.gitkeep
