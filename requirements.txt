@@ -6,7 +6,9 @@ imbalanced-learn==0.14.2
 matplotlib==3.11.2
 seaborn==0.13.2
 joblib==1.6.0
-mlflow=3.16.1
-psycopg[binary]=3.3.6
-uvicorn=0.54.0
-fastapi=0.142.2
+mlflow==3.16.1
+psycopg[binary]==3.3.6
+uvicorn==0.54.0
+fastapi==0.142.2
+requests==2.34.2
+streamlit==1.65.0

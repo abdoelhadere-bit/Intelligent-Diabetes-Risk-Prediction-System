@@ -18,7 +18,6 @@ state = {"model": None, "version": None}
 
 
 def load_production_model() -> None:
-    """Charge le pipeline portant l'alias @production depuis le Model Registry."""
     mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
     state["model"] = mlflow.sklearn.load_model(MODEL_URI)
     state["version"] = MlflowClient().get_model_version_by_alias(
@@ -29,7 +28,6 @@ def load_production_model() -> None:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Exécuté au démarrage : charge le modèle une seule fois."""
     try:
         load_production_model()
     except Exception:
@@ -42,14 +40,12 @@ app = FastAPI(title="Diabetes Risk API", version="1.0.0", lifespan=lifespan)
 
 @app.get("/health")
 def health() -> dict:
-    """Indique si l'API est en ligne et si un modèle est chargé."""
     return {"status": "ok", "model_loaded": state["model"] is not None,
             "model_version": state["version"]}
 
 
 @app.post("/predict", response_model=PredictionResponse)
 def predict(patient: PatientData) -> PredictionResponse:
-    """Prédit le niveau de risque à partir des constantes cliniques."""
     if state["model"] is None:
         raise HTTPException(status_code=503, detail="Modèle indisponible, réessayez plus tard.")
 
@@ -67,7 +63,6 @@ def predict(patient: PatientData) -> PredictionResponse:
 
 @app.post("/reload")
 def reload_model() -> dict:
-    """Recharge le modèle @production (après un réentraînement par Airflow)."""
     try:
         load_production_model()
     except Exception as exc:
